@@ -87,9 +87,9 @@ export const getGnosisSafeContractInstance = (chain: ChainInfo, safeVersion: str
 
   const deployment = _getSafeContractDeployment(chain, safeVersion)
   if (chain.chainId in deployments) {
-    deployment.networkAddresses[chain.chainId] = chain.l2 ?
-      deployments[chain.chainId].gnosisSafeL2 :
-      deployments[chain.chainId].gnosisSafe
+    deployment.networkAddresses[chain.chainId] = chain.l2
+      ? deployments[chain.chainId].gnosisSafeL2
+      : deployments[chain.chainId].gnosisSafe
   }
 
   console.log('gnosisSafeContract', deployment)
@@ -118,6 +118,11 @@ export const getMultiSendContractAddress = (chainId: string): string | undefined
 export const getMultiSendContractInstance = (chainId: string, safeVersion: string = LATEST_SAFE_VERSION) => {
   const ethAdapter = createEthersAdapter()
 
+  const deployment = getMultiSendContractDeployment(chainId)
+  if (chainId in deployments) {
+    deployment.networkAddresses[chainId] = deployments[chainId].multiSend
+  }
+
   return ethAdapter.getMultiSendContract({
     singletonDeployment: getMultiSendContractDeployment(chainId),
     ..._getValidatedGetContractProps(chainId, safeVersion),
@@ -145,8 +150,13 @@ export const getMultiSendCallOnlyContractInstance = (
 ) => {
   const ethAdapter = createEthersAdapter()
 
+  const deployment = getMultiSendCallOnlyContractDeployment(chainId)
+  if (chainId in deployments) {
+    deployment.networkAddresses[chainId] = deployments[chainId].multiSendCallOnly
+  }
+
   return ethAdapter.getMultiSendCallOnlyContract({
-    singletonDeployment: getMultiSendCallOnlyContractDeployment(chainId),
+    singletonDeployment: deployment,
     ..._getValidatedGetContractProps(chainId, safeVersion),
   })
 }

@@ -1,4 +1,26 @@
-const t: Record<string, any> = {
+const deployments: Record<string, any> = {
+  '16': {
+    compatibilityFallBackHandler: '0xe5F3b2036e030E921bcA9D871DbC34C6b0792077',
+    gnosisSafe: '0xab451EA38C6001D202fbE7155C6fCDAcb1713244',
+    gnosisSafeL2: '0x7a72bA633DaF405425c0d7343E4b802B05d87bc6',
+    multiSend: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
+    multiSendCallOnly: '0xA1dabEF33b3B82c7814B6D82A79e50F4AC44102B',
+    proxyFactory: '0xB20452a41ea9Aca263afce6B0C7CC0d5Fd410D62',
+    signMessageLib: '0x1CB1F7f320583Fa1A0dB7A579c34547cfc0f0d15',
+    simulateTxAccessor: '0x727a77a074D1E6c4530e814F89E618a3298FC044',
+    createCall: '0xB19D6FFc2182150F8Eb585b79D4ABcd7C5640A9d',
+  },
+  '19': {
+    compatibilityFallBackHandler: '0xe5F3b2036e030E921bcA9D871DbC34C6b0792077',
+    gnosisSafe: '0xab451EA38C6001D202fbE7155C6fCDAcb1713244',
+    gnosisSafeL2: '0x7a72bA633DaF405425c0d7343E4b802B05d87bc6',
+    multiSend: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
+    multiSendCallOnly: '0xA1dabEF33b3B82c7814B6D82A79e50F4AC44102B',
+    proxyFactory: '0xB20452a41ea9Aca263afce6B0C7CC0d5Fd410D62',
+    signMessageLib: '0x1CB1F7f320583Fa1A0dB7A579c34547cfc0f0d15',
+    simulateTxAccessor: '0x727a77a074D1E6c4530e814F89E618a3298FC044',
+    createCall: '0xB19D6FFc2182150F8Eb585b79D4ABcd7C5640A9d',
+  },
   '50': {
     compatibilityFallBackHandler: '0xf48f2B2d2a534e402487b3ee7C18c33Aec0Fe5e4',
     gnosisSafe: '0xd9Db270c1B5E3Bd161E8c8503c55cEABeE709552',
@@ -23,4 +45,4 @@ const t: Record<string, any> = {
   },
 }
 
-export default t
+export default deployments
