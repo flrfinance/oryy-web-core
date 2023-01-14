@@ -39,7 +39,6 @@ const SidebarFooter = (): ReactElement => {
       dispatch(openCookieBanner({ warningKey: CookieType.UPDATES }))
     }
   }
-  console.log(!IS_PRODUCTION || !process.env.NEXT_PUBLIC_IS_ORYY_PRODUCTION)
 
   return (
     <SidebarList>
