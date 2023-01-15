@@ -19,7 +19,6 @@ import { type Sign_message_lib } from '@/types/contracts/Sign_message_lib'
 import { assertValidSafeVersion, createEthersAdapter } from '@/hooks/coreSDK/safeCoreSDK'
 import { sameAddress } from '@/utils/addresses'
 import type CompatibilityFallbackHandlerEthersContract from '@safe-global/safe-ethers-lib/dist/src/contracts/CompatibilityFallbackHandler/CompatibilityFallbackHandlerEthersContract'
-import deployments from './deployments'
 
 export const isValidMasterCopy = async (chainId: string, address: string): Promise<boolean> => {
   const masterCopies = await getMasterCopies(chainId)
@@ -85,17 +84,8 @@ export const _getSafeContractDeployment = (chain: ChainInfo, safeVersion: string
 export const getGnosisSafeContractInstance = (chain: ChainInfo, safeVersion: string = LATEST_SAFE_VERSION) => {
   const ethAdapter = createEthersAdapter()
 
-  const deployment = _getSafeContractDeployment(chain, safeVersion)
-  if (chain.chainId in deployments) {
-    deployment.networkAddresses[chain.chainId] = chain.l2
-      ? deployments[chain.chainId].gnosisSafeL2
-      : deployments[chain.chainId].gnosisSafe
-  }
-
-  console.log('gnosisSafeContract', deployment)
-
   return ethAdapter.getSafeContract({
-    singletonDeployment: deployment,
+    singletonDeployment: _getSafeContractDeployment(chain, safeVersion),
     ..._getValidatedGetContractProps(chain.chainId, safeVersion),
   })
 }
@@ -108,20 +98,12 @@ const getMultiSendContractDeployment = (chainId: string) => {
 
 export const getMultiSendContractAddress = (chainId: string): string | undefined => {
   const deployment = getMultiSendContractDeployment(chainId)
-  if (chainId in deployments) {
-    deployment.networkAddresses[chainId] = deployments[chainId].multiSend
-  }
 
   return deployment?.networkAddresses[chainId]
 }
 
 export const getMultiSendContractInstance = (chainId: string, safeVersion: string = LATEST_SAFE_VERSION) => {
   const ethAdapter = createEthersAdapter()
-
-  const deployment = getMultiSendContractDeployment(chainId)
-  if (chainId in deployments) {
-    deployment.networkAddresses[chainId] = deployments[chainId].multiSend
-  }
 
   return ethAdapter.getMultiSendContract({
     singletonDeployment: getMultiSendContractDeployment(chainId),
@@ -137,9 +119,6 @@ const getMultiSendCallOnlyContractDeployment = (chainId: string) => {
 
 export const getMultiSendCallOnlyContractAddress = (chainId: string): string | undefined => {
   const deployment = getMultiSendCallOnlyContractDeployment(chainId)
-  if (chainId in deployments) {
-    deployment.networkAddresses[chainId] = deployments[chainId].multiSendCallOnly
-  }
 
   return deployment?.networkAddresses[chainId]
 }
@@ -150,13 +129,8 @@ export const getMultiSendCallOnlyContractInstance = (
 ) => {
   const ethAdapter = createEthersAdapter()
 
-  const deployment = getMultiSendCallOnlyContractDeployment(chainId)
-  if (chainId in deployments) {
-    deployment.networkAddresses[chainId] = deployments[chainId].multiSendCallOnly
-  }
-
   return ethAdapter.getMultiSendCallOnlyContract({
-    singletonDeployment: deployment,
+    singletonDeployment: getMultiSendCallOnlyContractDeployment(chainId),
     ..._getValidatedGetContractProps(chainId, safeVersion),
   })
 }
@@ -178,15 +152,8 @@ const getProxyFactoryContractDeployment = (chainId: string) => {
 export const getProxyFactoryContractInstance = (chainId: string, safeVersion: string = LATEST_SAFE_VERSION) => {
   const ethAdapter = createEthersAdapter()
 
-  const deployment = getProxyFactoryContractDeployment(chainId)
-  if (chainId in deployments) {
-    deployment.networkAddresses[chainId] = deployments[chainId].proxyFactory
-  }
-
-  console.log('proxy factory', deployment)
-
   return ethAdapter.getSafeProxyFactoryContract({
-    singletonDeployment: deployment,
+    singletonDeployment: getProxyFactoryContractDeployment(chainId),
     ..._getValidatedGetContractProps(chainId, safeVersion),
   })
 }
@@ -211,14 +178,8 @@ export const getFallbackHandlerContractInstance = (
 ): CompatibilityFallbackHandlerEthersContract => {
   const ethAdapter = createEthersAdapter()
 
-  const deployment = getFallbackHandlerContractDeployment(chainId)
-  if (chainId in deployments) {
-    deployment.networkAddresses[chainId] = deployments[chainId].compatibilityFallBackHandler
-  }
-
-  console.log('fallback handler', deployment)
   return ethAdapter.getCompatibilityFallbackHandlerContract({
-    singletonDeployment: deployment,
+    singletonDeployment: getFallbackHandlerContractDeployment(chainId),
     ..._getValidatedGetContractProps(chainId, safeVersion),
   })
 }
@@ -227,10 +188,6 @@ export const getFallbackHandlerContractInstance = (
 // TODO: Should this be implemented in Core SDK?
 export const getSignMessageLibDeploymentContractInstance = (chainId: string): Sign_message_lib => {
   const signMessageLibDeployment = getSignMessageLibDeployment({ network: chainId }) || getSignMessageLibDeployment()
-  if (chainId in deployments) {
-    signMessageLibDeployment.networkAddresses[chainId] = deployments[chainId].signMessageLib
-  }
-
   const contractAddress = signMessageLibDeployment?.networkAddresses[chainId]
 
   if (!contractAddress) {
