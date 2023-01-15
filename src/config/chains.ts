@@ -185,6 +185,8 @@ const chains: Record<string, string> = {
   rpg: '2025',
   eco: '2100',
   esp: '2101',
+  tkava: '2221',
+  kava: '2222',
   ktoc: '2559',
   zcrbeach: '3331',
   'w3q-t': '3333',
