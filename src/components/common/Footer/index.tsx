@@ -27,7 +27,7 @@ const Footer = (): ReactElement | null => {
     <footer className={css.container}>
       <ul>
         <li>
-          <Typography variant="caption">&copy;2022 FLR Finance.</Typography>
+          <Typography variant="caption">&copy;2023 Ēnosys.</Typography>
         </li>
         <li>
           <ExternalLink noIcon href="https://safe.global/terms">
