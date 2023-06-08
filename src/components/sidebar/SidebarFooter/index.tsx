@@ -44,7 +44,7 @@ const SidebarFooter = (): ReactElement => {
 
   return (
     <SidebarList>
-      {!IS_PRODUCTION && (
+      {!IS_PRODUCTION && !process.env.NEXT_PUBLIC_IS_ORYY_PRODUCTION && (
         <ListItem disablePadding>
           <DebugToggle />
         </ListItem>

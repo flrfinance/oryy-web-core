@@ -7,7 +7,7 @@ const Open: NextPage = () => {
   return (
     <main>
       <Head>
-        <title>Safe – Create Safe</title>
+        <title>Oryy – Create Safe</title>
       </Head>
 
       <CreateSafe />
