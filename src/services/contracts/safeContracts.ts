@@ -186,13 +186,8 @@ const getProxyFactoryContractDeployment = (chainId: string) => {
   )
 }
 
-<<<<<<< HEAD
 export const getReadOnlyProxyFactoryContract = (chainId: string, safeVersion: string = LATEST_SAFE_VERSION) => {
   const ethAdapter = createReadOnlyEthersAdapter()
-=======
-export const getProxyFactoryContractInstance = (chainId: string, safeVersion: string = LATEST_SAFE_VERSION) => {
-  const ethAdapter = createEthersAdapter()
->>>>>>> 6b1dace6 (Revert "Stub new deployments in contracts fetch service")
 
   return ethAdapter.getSafeProxyFactoryContract({
     singletonDeployment: getProxyFactoryContractDeployment(chainId),
