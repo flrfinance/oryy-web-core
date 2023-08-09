@@ -143,8 +143,13 @@ export const getReadOnlyMultiSendCallOnlyContract = (
 ) => {
   const ethAdapter = createReadOnlyEthersAdapter()
 
+  const deployment = getMultiSendCallOnlyContractDeployment(chainId)
+  if (chainId in deployments) {
+    deployment.networkAddresses[chainId] = deployments[chainId].multiSendCallOnly
+  }
+
   return ethAdapter.getMultiSendCallOnlyContract({
-    singletonDeployment: getMultiSendCallOnlyContractDeployment(chainId),
+    singletonDeployment: deployment,
     ..._getValidatedGetContractProps(chainId, safeVersion),
   })
 }
