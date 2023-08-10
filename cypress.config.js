@@ -4,12 +4,8 @@ export default defineConfig({
   projectId: 'exhdra',
   trashAssetsBeforeRuns: true,
 
-  env: {
-    CYPRESS_MNEMONIC: process.env.CYPRESS_MNEMONIC,
-  },
-
   retries: {
-    runMode: 2,
+    runMode: 3,
     openMode: 0,
   },
 

@@ -1,5 +1,14 @@
-.hide {
-  display: none;
+.tableCell {
+  transition: padding 0s;
+}
+
+.collapsedCell {
+  padding: 0px !important;
+  transition: padding 300ms ease-in-out;
+}
+
+.collapsedRow {
+  border-bottom: none !important;
 }
 
 .actions {
@@ -7,4 +16,20 @@
   justify-content: flex-end;
   align-items: center;
   gap: var(--space-1);
+}
+
+@media (max-width: 899.95px) {
+  .mobileColumn thead th {
+    display: none;
+  }
+
+  .mobileColumn thead th:first-of-type {
+    display: block;
+  }
+
+  .mobileColumn tbody td {
+    display: block;
+    padding-left: var(--space-2) !important;
+    background: inherit;
+  }
 }

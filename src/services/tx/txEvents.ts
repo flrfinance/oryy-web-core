@@ -1,5 +1,5 @@
 import EventBus from '@/services/EventBus'
-import type { RequestId } from '@gnosis.pm/safe-apps-sdk'
+import type { RequestId } from '@safe-global/safe-apps-sdk'
 
 export enum TxEvent {
   SIGNED = 'SIGNED',
@@ -16,9 +16,11 @@ export enum TxEvent {
   PROCESSING_MODULE = 'PROCESSING_MODULE',
   PROCESSED = 'PROCESSED',
   REVERTED = 'REVERTED',
+  RELAYING = 'RELAYING',
   FAILED = 'FAILED',
   SUCCESS = 'SUCCESS',
   SAFE_APPS_REQUEST = 'SAFE_APPS_REQUEST',
+  BATCH_ADD = 'BATCH_ADD',
 }
 
 type Id = { txId: string; groupKey?: string } | { txId?: string; groupKey: string }
@@ -36,11 +38,13 @@ interface TxEvents {
   [TxEvent.EXECUTING]: Id
   [TxEvent.PROCESSING]: Id & { txHash: string }
   [TxEvent.PROCESSING_MODULE]: Id & { txHash: string }
-  [TxEvent.PROCESSED]: Id
+  [TxEvent.PROCESSED]: Id & { safeAddress: string }
   [TxEvent.REVERTED]: Id & { error: Error }
+  [TxEvent.RELAYING]: Id & { taskId: string }
   [TxEvent.FAILED]: Id & { error: Error }
   [TxEvent.SUCCESS]: Id
   [TxEvent.SAFE_APPS_REQUEST]: { safeAppRequestId: RequestId; safeTxHash: string }
+  [TxEvent.BATCH_ADD]: Id
 }
 
 const txEventBus = new EventBus<TxEvents>()
@@ -52,6 +56,6 @@ export const txSubscribe = txEventBus.subscribe.bind(txEventBus)
 // Log all events
 Object.values(TxEvent).forEach((event: TxEvent) => {
   txSubscribe<TxEvent>(event, (detail) => {
-    console.info(`${event} event received`, detail)
+    console.info(`Transaction ${event} event received`, detail)
   })
 })

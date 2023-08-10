@@ -36,7 +36,7 @@ import {
 import { getSpendingLimitModuleAddress } from '@/services/contracts/spendingLimitContracts'
 import { sameAddress } from '@/utils/addresses'
 import { getMultiSendCallOnlyContractAddress, getMultiSendContractAddress } from '@/services/contracts/safeContracts'
-import type { NamedAddress } from '@/components/create-safe/types'
+import type { NamedAddress } from '@/components/new-safe/create/types'
 
 export const isTxQueued = (value: TransactionStatus): boolean => {
   return [TransactionStatus.AWAITING_CONFIRMATIONS, TransactionStatus.AWAITING_EXECUTION].includes(value)
@@ -127,6 +127,17 @@ export const isSignableBy = (txSummary: TransactionSummary, walletAddress: strin
   return !!executionInfo?.missingSigners?.some((address) => address.value === walletAddress)
 }
 
+export const isConfirmableBy = (txSummary: TransactionSummary, walletAddress: string): boolean => {
+  if (!txSummary.executionInfo || !isMultisigExecutionInfo(txSummary.executionInfo)) {
+    return false
+  }
+  const { confirmationsRequired, confirmationsSubmitted } = txSummary.executionInfo
+  return (
+    confirmationsSubmitted >= confirmationsRequired ||
+    (confirmationsSubmitted === confirmationsRequired - 1 && isSignableBy(txSummary, walletAddress))
+  )
+}
+
 export const isExecutable = (txSummary: TransactionSummary, walletAddress: string, safe: SafeInfo): boolean => {
   if (
     !txSummary.executionInfo ||
@@ -135,11 +146,7 @@ export const isExecutable = (txSummary: TransactionSummary, walletAddress: strin
   ) {
     return false
   }
-  const { confirmationsRequired, confirmationsSubmitted } = txSummary.executionInfo
-  return (
-    confirmationsSubmitted >= confirmationsRequired ||
-    (confirmationsSubmitted === confirmationsRequired - 1 && isSignableBy(txSummary, walletAddress))
-  )
+  return isConfirmableBy(txSummary, walletAddress)
 }
 
 // Spending limits
@@ -172,7 +179,7 @@ export const isSupportedSpendingLimitAddress = (txInfo: TransactionInfo, chainId
 }
 
 // Method parameter types
-export const isArrayParameter = (parameter: string): boolean => /(\[\d*])+$/.test(parameter)
+export const isArrayParameter = (parameter: string): boolean => /(\[\d*?])+$/.test(parameter)
 export const isAddress = (type: string): boolean => type.indexOf('address') === 0
 export const isByte = (type: string): boolean => type.indexOf('byte') === 0
 

@@ -7,6 +7,8 @@ import type { TransactionDetails } from '@safe-global/safe-gateway-typescript-sd
 import { Operation } from '@safe-global/safe-gateway-typescript-sdk'
 import { dateString } from '@/utils/formatters'
 import css from './styles.module.css'
+import type { SafeTransaction } from '@safe-global/safe-core-sdk-types'
+import SafeTxGasForm from '../SafeTxGasForm'
 
 interface Props {
   txDetails: TransactionDetails
@@ -44,22 +46,24 @@ const Summary = ({ txDetails, defaultExpanded = false }: Props): ReactElement =>
             </Link>
           )}
 
-          <div className={`${css.collapsibleSection}${expanded ? 'Expanded' : ''}`}>
-            <TxDataRow title="Operation:">
-              {`${txData.operation} (${Operation[txData.operation].toLowerCase()})`}
-            </TxDataRow>
-            <TxDataRow title="safeTxGas:">{safeTxGas}</TxDataRow>
-            <TxDataRow title="baseGas:">{baseGas}</TxDataRow>
-            <TxDataRow title="gasPrice:">{gasPrice}</TxDataRow>
-            <TxDataRow title="gasToken:">{generateDataRowValue(gasToken, 'hash', true)}</TxDataRow>
-            <TxDataRow title="refundReceiver:">{generateDataRowValue(refundReceiver, 'hash', true)}</TxDataRow>
-            {confirmations?.map(({ signature }, index) => (
-              <TxDataRow title={`Signature ${index + 1}:`} key={`signature-${index}:`}>
-                {generateDataRowValue(signature, 'rawData')}
+          {expanded && (
+            <div>
+              <TxDataRow title="Operation:">
+                {`${txData.operation} (${Operation[txData.operation].toLowerCase()})`}
               </TxDataRow>
-            ))}
-            <TxDataRow title="Raw data:">{generateDataRowValue(txData.hexData, 'rawData')}</TxDataRow>
-          </div>
+              <TxDataRow title="safeTxGas:">{safeTxGas}</TxDataRow>
+              <TxDataRow title="baseGas:">{baseGas}</TxDataRow>
+              <TxDataRow title="gasPrice:">{gasPrice}</TxDataRow>
+              <TxDataRow title="gasToken:">{generateDataRowValue(gasToken, 'hash', true)}</TxDataRow>
+              <TxDataRow title="refundReceiver:">{generateDataRowValue(refundReceiver, 'hash', true)}</TxDataRow>
+              {confirmations?.map(({ signature }, index) => (
+                <TxDataRow title={`Signature ${index + 1}:`} key={`signature-${index}:`}>
+                  {generateDataRowValue(signature, 'rawData')}
+                </TxDataRow>
+              ))}
+              <TxDataRow title="Raw data:">{generateDataRowValue(txData.hexData, 'rawData')}</TxDataRow>
+            </div>
+          )}
         </>
       )}
     </>
@@ -67,3 +71,17 @@ const Summary = ({ txDetails, defaultExpanded = false }: Props): ReactElement =>
 }
 
 export default Summary
+
+export const PartialSummary = ({ safeTx }: { safeTx: SafeTransaction }) => {
+  const txData = safeTx.data
+  return (
+    <>
+      <TxDataRow title="safeTxGas:">
+        <SafeTxGasForm />
+      </TxDataRow>
+      <TxDataRow title="baseGas:">{txData.baseGas}</TxDataRow>
+      <TxDataRow title="refundReceiver:">{generateDataRowValue(txData.refundReceiver, 'hash', true)}</TxDataRow>
+      <TxDataRow title="Raw data:">{generateDataRowValue(txData.data, 'rawData')}</TxDataRow>
+    </>
+  )
+}
