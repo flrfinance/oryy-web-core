@@ -8,7 +8,7 @@
     "dev": "next dev",
     "start": "next dev",
     "build": "next build",
-    "stub-contracts": "rimraf node_modules/@gnosis.pm/safe-deployments/dist/assets/v1.3.0 && rimraf node_modules/@gnosis.pm/safe-deployments/dist/assets/v1.3.0 && cp -r v1.3.0 node_modules/@gnosis.pm/safe-deployments/dist/assets/v1.3.0 && cp -r v1.3.0 node_modules/@gnosis.pm/safe-deployments/src/assets/v1.3.0",
+    "stub-contracts": "rimraf node_modules/@safe-global/safe-deployments/dist/assets/v1.3.0 && rimraf node_modules/@safe-global/safe-deployments/dist/assets/v1.3.0 && cp -r v1.3.0 node_modules/@safe-global/safe-deployments/dist/assets/v1.3.0 && cp -r v1.3.0 node_modules/@safe-global/safe-deployments/src/assets/v1.3.0",
     "export": "next export",
     "lint": "tsc && next lint",
     "lint:fix": "next lint --fix",
